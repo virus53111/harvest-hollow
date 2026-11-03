@@ -46,6 +46,7 @@ import { FarmRegistry, ID_RE, redactArg, redactLog } from './farms.js';
 import { WindowLimiter, Counter, clientIp, maskIp } from './ip-limits.js';
 import { multiConfig } from './config.js';
 import { mountIdeas } from './ideas.js';
+import { createPremiumShop } from './premium-shop.js';
 import { StarCount } from './stars.js';
 import { isTimeZone } from '../shared/rules/calendar.js';
 import { LIMITS, PROTOCOL_VERSION } from '../shared/net/protocol.js';
@@ -196,6 +197,10 @@ export function createMultiApp(hh) {
     return res.type('application/manifest+json').send(JSON.stringify(m));
   });
   mountAssets(app, hh.static, cfg.root, { host: cfg.assets?.host !== false });   // /b/<build>/: this host serves option 2's files
+
+  // Server-side cosmetics shop; webhook body is verified before anything is awarded.
+  const premium = createPremiumShop({ cfg, reg, sameOrigin, keyOf, log });
+  premium.mountGlobal(app);
 
   app.get('/api/status', (_req, res) => res.set('Cache-Control', NO_STORE).json(multiStatus(hh)));
 
@@ -370,6 +375,7 @@ export function createMultiApp(hh) {
     farmApi.use('/harness', hh.harness.router);
     hh.harness.mountAssets(app);
   }
+  premium.mountFarm(farmApi);
   app.use('/api/f/:id', farmApi);
   app.use('/api', (_req, res) => res.status(404).json({ error: 'not found' }));
   // Express's default handler prints the stack (a path may name a farm): a body that is not JSON is the client's
