@@ -69,7 +69,7 @@ if (farmMatch) {
   }
   async function syncOwned() {
     const token = secret();
-    if (!token) return;
+    if (!token) { owned = []; paintCosmetics(); return; }
     try {
       const res = await fetch('/api/f/' + farmId + '/shop/entitlements', {
         headers: { authorization: 'Bearer ' + token }, cache: 'no-store',
@@ -77,6 +77,9 @@ if (farmMatch) {
       if (res.ok) {
         const body = await res.json();
         if (Array.isArray(body.items)) owned = body.items;
+        paintCosmetics();
+      } else if (res.status === 401 || res.status === 403) {
+        owned = [];
         paintCosmetics();
       }
     } catch { /* a disconnect must not break the main game */ }
