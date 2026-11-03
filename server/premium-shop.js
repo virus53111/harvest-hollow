@@ -124,6 +124,9 @@ export function createPremiumShop({ cfg, reg, sameOrigin, keyOf, log = console }
   const dataPath = path.join(cfg.dataDir, 'shop', 'purchases.json');
   const db = loadStore(dataPath);
   const throttle = new Map();
+  // The original game's 7-day farm expiry must not erase paid purchases.
+  // This hook is based only on server-verified, non-refunded transactions.
+  reg.premiumRetain = (farmId) => Object.values(db.purchases).some(p => p.farmId === farmId && p.status === 'paid');
 
   function save() { persistStore(dataPath, db); }
   async function member(req) {
