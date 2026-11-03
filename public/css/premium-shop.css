@@ -1,0 +1,51 @@
+/* Optional in-game premium UI. Does not affect gameplay / purchased game data. */
+#hh-premium-open{
+  position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));
+  z-index:80;border:2px solid #e6c374;border-radius:20px;color:#3c2448;
+  background:linear-gradient(135deg,#fff2be,#ffe1e5 58%,#e1d6ff);
+  box-shadow:0 7px 23px #1d112a75, inset 0 2px 0 #fff9;
+  padding:11px 17px;font:900 15px system-ui,sans-serif;letter-spacing:.5px;cursor:pointer;
+}
+#hh-premium-open[hidden]{display:none}
+.hh-premium-dialog{border:1px solid #f9e5be;border-radius:25px;background:#fffaf3;color:#452e40;
+  width:min(640px,calc(100vw - 24px));max-height:min(85vh,740px);padding:0;overflow:auto;
+  box-shadow:0 30px 90px #100b1bba;z-index:10000}
+.hh-premium-dialog::backdrop{background:rgba(12,20,35,.72);backdrop-filter:blur(7px)}
+.hh-premium-head{display:flex;align-items:flex-start;gap:10px;justify-content:space-between;
+  padding:25px 26px 18px;background:linear-gradient(135deg,#f9e2fd,#fdf3d5)}
+.hh-premium-head h2{font-size:clamp(25px,5vw,34px);margin:5px 0 6px;line-height:1.1;color:#54305c}
+.hh-premium-head p{font:500 13px/1.5 system-ui,sans-serif;color:#716575;max-width:470px;margin:0}
+.hh-premium-eyebrow{font:900 11px system-ui,sans-serif;letter-spacing:2px;color:#915b83}
+.hh-premium-close{background:#fff9;border:1px solid #d2bbd6;border-radius:50%;width:34px;height:34px;cursor:pointer;color:#5b4164}
+.hh-premium-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:20px}
+.hh-premium-item{border:1px solid #e6d7cb;border-radius:17px;background:#fff;padding:16px 12px;
+  box-shadow:0 3px 16px #3b193a10;display:flex;flex-direction:column;text-align:center;align-items:center;gap:8px}
+.hh-premium-icon{font-size:38px;line-height:1.5}
+.hh-premium-item h3{font:800 15px/1.25 system-ui,sans-serif;min-height:38px;color:#4d3263;margin:0}
+.hh-premium-item p{font:500 12px/1.5 system-ui,sans-serif;color:#897b84;flex:1;margin:0}
+.hh-premium-item button{width:100%;border:0;padding:11px 6px;border-radius:12px;background:#7754a7;color:white;
+  font:800 12px system-ui,sans-serif;cursor:pointer}
+.hh-premium-item button:disabled{background:#b1a4b9;cursor:default}
+.hh-premium-status{font:700 13px/1.4 system-ui,sans-serif;padding:4px 22px 8px;color:#885f86;text-align:center;margin:0}
+.hh-premium-foot{padding:13px 24px 20px;font:400 11px/1.5 system-ui,sans-serif;color:#776c72}
+.hh-premium-foot a{color:#7458aa}
+body.hh-premium-gold #hud-level-card{box-shadow:0 0 0 3px #f2c95a,0 0 21px 7px #eaa94199!important;
+  border-radius:17px;filter:saturate(1.3)}
+#hh-premium-badge{position:fixed;top:calc(135px + env(safe-area-inset-top,0px));left:18px;z-index:85;
+  pointer-events:none;font:800 13px system-ui,sans-serif;color:#ffe5a0;text-shadow:0 1px 7px #2c0b37;
+  background:linear-gradient(105deg,#6d3585aa,#3e235faa);border-radius:16px;padding:6px 12px}
+#hh-premium-badge:empty{display:none}
+#hh-premium-fireflies{position:fixed;inset:0;z-index:22;pointer-events:none;display:none;overflow:hidden}
+body.hh-premium-fireflies #hh-premium-fireflies{display:block}
+#hh-premium-fireflies i{position:absolute;width:5px;height:5px;left:var(--x);top:var(--y);
+  background:#fcf6a0;border-radius:50%;box-shadow:0 0 9px 4px #f4d468,0 0 23px 8px #d8edb3;
+  opacity:0;animation:hh-sparkle var(--speed) ease-in-out var(--delay) infinite alternate}
+@keyframes hh-sparkle{0%{opacity:0;transform:translateY(20px) scale(.3)}
+  50%{opacity:.8;transform:translate(16px,-10px) scale(1)}
+  100%{opacity:.05;transform:translate(-18px,-40px) scale(.2)}}
+@media(max-width:650px){.hh-premium-grid{grid-template-columns:1fr;padding:12px}
+  .hh-premium-item{flex-direction:row;text-align:left;flex-wrap:wrap}
+  .hh-premium-item h3{min-height:0}.hh-premium-item p{flex-basis:calc(100% - 65px)}
+  .hh-premium-item button{max-width:150px;margin-left:auto}
+  #hh-premium-open{font-size:12px;padding:8px 12px;right:6px;bottom:calc(75px + env(safe-area-inset-bottom,0px))}}
+@media(prefers-reduced-motion:reduce){#hh-premium-fireflies i{animation:none;display:none}}

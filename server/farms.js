@@ -406,6 +406,8 @@ export class FarmRegistry {
     let n = 0;
     for (const rec of [...this.recs.values()]) {
       if (this.busy(rec)) continue;
+      // Never expire a farm with a purchased cosmetic; it remains until its owner deletes it.
+      if (this.premiumRetain?.(rec.id)) continue;
       const last = Number.isFinite(rec.meta.lastSeenAt) ? rec.meta.lastSeenAt : rec.meta.createdAt;
       if (!(now - last >= ttl)) continue;
       if (rec.host) await this.unload(rec);

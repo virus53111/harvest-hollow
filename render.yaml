@@ -1,0 +1,34 @@
+# Render Blueprint for a real, persistent single-instance public farm.
+# WARNING: starter instance + persistent disk are PAID Render resources.
+# Stripe is DISABLED until the operator configures test credentials and opts in.
+# Preview first; do not activate live charges without merchant compliance review.
+services:
+  - type: web
+    name: cozy-farm-stripe-ready
+    runtime: docker
+    plan: starter
+    region: frankfurt
+    healthCheckPath: /api/status
+    disk:
+      name: farm-purchases
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: HH_MODE
+        value: multi
+      - key: HH_DATA_DIR
+        value: /data
+      - key: HH_HOST
+        value: 0.0.0.0
+      - key: HH_TRUST_PROXY
+        value: '1'
+      - key: HH_HELPER
+        value: 'off'
+      - key: HH_STARS_URL
+        value: 'off'
+      - key: SHOP_ENABLE_PAYMENTS
+        value: '0'
+      - key: SHOP_ALLOW_LIVE
+        value: '0'
+      - key: NODE_ENV
+        value: production
